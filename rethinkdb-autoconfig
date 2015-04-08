@@ -1,0 +1,20 @@
+#!/bin/bash -eux
+
+export MEM_USE="$(($(grep '^MemTotal:[[:space:]]' /proc/meminfo|awk '{print $2}')*$MEM_PC/100/1024))"
+export LOCAL_ADDR="$(ip addr show dev eth0|grep -P '^\s*inet\s+'|tr '/' ' '|awk '{print $2}')"
+
+joinAddr=""
+
+if "$NODE_ADDR" != "$PRIMARY_NODE_ADDR"
+  then
+  joinAddr="--join $PRIMARY_NODE_ADDR:29015"
+  fi
+
+exec rethinkdb $joinAddr \
+  --directory /storage/data \
+  --server-name "$NODE_NAME" \
+  --bind "$LOCAL_ADDR" \
+  --canonical-address "$NODE_ADDR" \
+  --cores "$(grep -c '^processor' /proc/cpuinfo)" \
+  --cache-size "$MEM_USE" \
+  --log-file /storage/logs/rethinkdb.log
