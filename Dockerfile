@@ -18,6 +18,9 @@ RUN \
 # Install python driver for rethinkdb
 RUN pip install rethinkdb
 
+ADD cassandra-autoconfig /cassandra-autoconfig
+
+
 # Define mountable directories.
 VOLUME ["/storage/data"]
 VOLUME ["/storage/logs"]
