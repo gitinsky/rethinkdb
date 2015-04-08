@@ -5,10 +5,13 @@ export LOCAL_ADDR="$(ip addr show dev eth0|grep -P '^\s*inet\s+'|tr '/' ' '|awk 
 
 joinAddr=""
 
-if "$NODE_ADDR" != "$PRIMARY_NODE_ADDR"
+if test "$NODE_ADDR" != "$PRIMARY_NODE_ADDR"
   then
   joinAddr="--join $PRIMARY_NODE_ADDR:29015"
   fi
+
+test -e /storage/data/metadata ||
+  rethinkdb create --directory /storage/data --log-file /storage/logs/rethinkdb.log
 
 exec rethinkdb $joinAddr \
   --directory /storage/data \
