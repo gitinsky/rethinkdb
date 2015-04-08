@@ -18,7 +18,7 @@ RUN \
 # Install python driver for rethinkdb
 RUN pip install rethinkdb
 
-ADD cassandra-autoconfig /cassandra-autoconfig
+ADD rethinkdb-autoconfig /rethinkdb-autoconfig
 
 
 # Define mountable directories.
